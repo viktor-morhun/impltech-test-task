@@ -1,23 +1,24 @@
 import logo from './logo.svg';
 import './App.css';
+import React, { useEffect } from 'react';
+import PersonCard from './PersonCard';
 
 function App() {
+  const [people, setPeople] = React.useState([]);
+
+  useEffect(() => {
+    fetch('https://swapi.dev/api/people/')
+      .then(response => response.json())
+      .then(people => {
+        setPeople(people.results);
+      })
+  }, []);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {people.map(person => (
+        <PersonCard person={person} key={person.name}/>
+      ))}
     </div>
   );
 }
